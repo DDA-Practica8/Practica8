@@ -1,0 +1,571 @@
+C:\xampp\mysql\bin>mysql -u root -p mysql
+Enter password: **************
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MySQL connection id is 34
+Server version: 8.0.26 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MySQL [mysql]> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| pruebagdi          |
+| sakila             |
+| sys                |
+| testdatabase       |
+| world              |
++--------------------+
+8 rows in set (0.036 sec)
+
+MySQL [mysql]> create DATABASE publications;
+Query OK, 1 row affected (0.015 sec)
+
+MySQL [mysql]> use publications;
+Database changed
+
+MySQL [publications]> CREATE TABLE classics(author VARCHAR(128), title VARCHAR(128), type VARCHAR(16), year CHAR(4)) ENGINE InnoDB;
+Query OK, 0 rows affected (0.067 sec)
+
+MySQL [publications]> describe classics;
++--------+--------------+------+-----+---------+-------+
+| Field  | Type         | Null | Key | Default | Extra |
++--------+--------------+------+-----+---------+-------+
+| author | varchar(128) | YES  |     | NULL    |       |
+| title  | varchar(128) | YES  |     | NULL    |       |
+| type   | varchar(16)  | YES  |     | NULL    |       |
+| year   | char(4)      | YES  |     | NULL    |       |
++--------+--------------+------+-----+---------+-------+
+4 rows in set (0.010 sec)
+
+MySQL [publications]> alter table classics ADD id INT unsigned NOT NULL AUTO_INCREMENT KEY;
+Query OK, 0 rows affected (0.099 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MySQL [publications]> ALTER TABLE classics DROP id;
+Query OK, 0 rows affected (0.100 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+
+MySQL [publications]> INSERT INTO classics(author, title, type, year) VALUES('Mark Twain','The Adventures of Tom Sawyer','Fiction','1876');
+Query OK, 1 row affected (0.014 sec)
+
+MySQL [publications]> INSERT INTO classics(author, title, type, year) VALUES('Jane Austen','Pride and Prejudice','Fiction','1811');
+Query OK, 1 row affected (0.005 sec)
+
+MySQL [publications]> INSERT INTO classics(author, title, type, year) VALUES('Charles Darwin','The Origin of Species','Non-Fiction','1856');
+Query OK, 1 row affected (0.008 sec)
+
+MySQL [publications]> INSERT INTO classics(author, title, type, year) VALUES('Charles Dickens','The Old Curiosity Shop','Fiction','1841');
+Query OK, 1 row affected (0.005 sec)
+
+MySQL [publications]> INSERT INTO classics(author, title, type, year) VALUES('William Shakespeare','Romeo and Juliet','Play','1594');
+Query OK, 1 row affected (0.006 sec)
+
+MySQL [publications]> SELECT * FROM classics;
++---------------------+------------------------------+-------------+------+
+| author              | title                        | type        | year |
++---------------------+------------------------------+-------------+------+
+| Mark Twain          | The Adventures of Tom Sawyer | Fiction     | 1876 |
+| Jane Austen         | Pride and Prejudice          | Fiction     | 1811 |
+| Charles Darwin      | The Origin of Species        | Non-Fiction | 1856 |
+| Charles Dickens     | The Old Curiosity Shop       | Fiction     | 1841 |
+| William Shakespeare | Romeo and Juliet             | Play        | 1594 |
++---------------------+------------------------------+-------------+------+
+5 rows in set (0.000 sec)
+
+MySQL [publications]> ALTER TABLE classics RENAME pre1900;
+Query OK, 0 rows affected (0.038 sec)
+
+MySQL [publications]> ALTER TABLE classics MODIFY year SMALLINT;
+ERROR 1146 (42S02): Table 'publications.classics' doesn't exist
+MySQL [publications]>
+MySQL [publications]> ALTER TABLE pre1900 RENAME classics;
+Query OK, 0 rows affected (0.091 sec)
+
+MySQL [publications]> ALTER TABLE classics MODIFY year SMALLINT;
+Query OK, 5 rows affected (0.253 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+MySQL [publications]> ALTER TABLE classics ADD pages SMALLINT UNSIGNED;
+Query OK, 0 rows affected (0.031 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MySQL [publications]> ALTER TABLE classics CHANGE type category VARCHAR(16);
+Query OK, 0 rows affected (0.013 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MySQL [publications]> ALTER TABLE classics DROP pages;
+Query OK, 0 rows affected (0.097 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MySQL [publications]> CREATE TABLE disposable(trash INT);
+Query OK, 0 rows affected (0.058 sec)
+
+MySQL [publications]> DESCRIBE disposable;
++-------+------+------+-----+---------+-------+
+| Field | Type | Null | Key | Default | Extra |
++-------+------+------+-----+---------+-------+
+| trash | int  | YES  |     | NULL    |       |
++-------+------+------+-----+---------+-------+
+1 row in set (0.003 sec)
+
+MySQL [publications]> DROP TABLE disposable;
+Query OK, 0 rows affected (0.033 sec)
+
+MySQL [publications]> SHOW tables;
++------------------------+
+| Tables_in_publications |
++------------------------+
+| classics               |
++------------------------+
+1 row in set (0.004 sec)
+
+MySQL [publications]> ALTER TABLE classics ADD INDEX(author(20));
+Query OK, 0 rows affected (0.100 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MySQL [publications]> ALTER TABLE classics ADD INDEX(title(20));
+Query OK, 0 rows affected (0.034 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MySQL [publications]> ALTER TABLE classics ADD INDEX(category(4));
+Query OK, 0 rows affected (0.035 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MySQL [publications]> ALTER TABLE classics ADD INDEX(year);
+Query OK, 0 rows affected (0.034 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MySQL [publications]> DESCRIBE classics;
++----------+--------------+------+-----+---------+-------+
+| Field    | Type         | Null | Key | Default | Extra |
++----------+--------------+------+-----+---------+-------+
+| author   | varchar(128) | YES  | MUL | NULL    |       |
+| title    | varchar(128) | YES  | MUL | NULL    |       |
+| category | varchar(16)  | YES  | MUL | NULL    |       |
+| year     | smallint     | YES  | MUL | NULL    |       |
++----------+--------------+------+-----+---------+-------+
+4 rows in set (0.004 sec)
+
+MySQL [publications]> ALTER TABLE classics ADD INDEX(author(20));
+Query OK, 0 rows affected, 1 warning (0.042 sec)
+Records: 0  Duplicates: 0  Warnings: 1
+
+
+MySQL [publications]>
+MySQL [publications]> CREATE TABLE classics1 (
+    -> author VARCHAR(128),
+    -> title VARCHAR(128),
+    -> category VARCHAR(16),
+    -> year SMALLINT,
+    -> INDEX(author(20)),
+    -> INDEX(title(20)),
+    -> INDEX(category(4)),
+    -> INDEX(year)) ENGINE InnoDB;
+Query OK, 0 rows affected (0.089 sec)
+
+MySQL [publications]> DROP TABLE classics1;
+Query OK, 0 rows affected (0.049 sec)
+
+MySQL [publications]> ALTER TABLE classics ADD isbn CHAR(13);
+Query OK, 0 rows affected (0.055 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MySQL [publications]> UPDATE classics SET isbn='9781598184891' WHERE year='1876';
+Query OK, 1 row affected (0.005 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MySQL [publications]> UPDATE classics SET isbn='9780582506206' WHERE year='1811';
+Query OK, 1 row affected (0.005 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MySQL [publications]> UPDATE classics SET isbn='9780517123201' WHERE year='1856';
+Query OK, 1 row affected (0.018 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MySQL [publications]> UPDATE classics SET isbn='9780099533474' WHERE year='1841';
+Query OK, 1 row affected (0.006 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MySQL [publications]> UPDATE classics SET isbn='9780192814968' WHERE year='1594';
+Query OK, 1 row affected (0.005 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MySQL [publications]> ALTER TABLE classics ADD PRIMARY KEY(isbn);
+Query OK, 0 rows affected (0.197 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MySQL [publications]> DESCRIBE classics
+    -> ;
++----------+--------------+------+-----+---------+-------+
+| Field    | Type         | Null | Key | Default | Extra |
++----------+--------------+------+-----+---------+-------+
+| author   | varchar(128) | YES  | MUL | NULL    |       |
+| title    | varchar(128) | YES  | MUL | NULL    |       |
+| category | varchar(16)  | YES  | MUL | NULL    |       |
+| year     | smallint     | YES  | MUL | NULL    |       |
+| isbn     | char(13)     | NO   | PRI | NULL    |       |
++----------+--------------+------+-----+---------+-------+
+5 rows in set (0.004 sec)
+
+MySQL [publications]> CREATE TABLE classics1 (
+    -> author VARCHAR(128),
+    -> title VARCHAR(128),
+    -> category VARCHAR(16),
+    -> year SMALLINT,
+    -> isbn CHAR(13),
+    -> INDEX(author(20)),
+    -> INDEX(title(20)),
+    -> INDEX(category(4)),
+    -> INDEX(year),
+    -> PRIMARY KEY (isbn)) ENGINE InnoDB;
+Query OK, 0 rows affected (0.131 sec)
+
+MySQL [publications]> ALTER TABLE classics1 ADD FULLTEXT(author,title);
+Query OK, 0 rows affected, 1 warning (0.558 sec)
+Records: 0  Duplicates: 0  Warnings: 1
+
+MySQL [publications]> SELECT author,title FROM classics;
++---------------------+------------------------------+
+| author              | title                        |
++---------------------+------------------------------+
+| Charles Dickens     | The Old Curiosity Shop       |
+| William Shakespeare | Romeo and Juliet             |
+| Charles Darwin      | The Origin of Species        |
+| Jane Austen         | Pride and Prejudice          |
+| Mark Twain          | The Adventures of Tom Sawyer |
++---------------------+------------------------------+
+5 rows in set (0.003 sec)
+
+MySQL [publications]> SELECT title,isbn FROM classics;
++------------------------------+---------------+
+| title                        | isbn          |
++------------------------------+---------------+
+| The Old Curiosity Shop       | 9780099533474 |
+| Romeo and Juliet             | 9780192814968 |
+| The Origin of Species        | 9780517123201 |
+| Pride and Prejudice          | 9780582506206 |
+| The Adventures of Tom Sawyer | 9781598184891 |
++------------------------------+---------------+
+5 rows in set (0.000 sec)
+
+MySQL [publications]> SELECT COUNT(*) FROM classics;
++----------+
+| COUNT(*) |
++----------+
+|        5 |
++----------+
+1 row in set (0.000 sec)
+
+MySQL [publications]> SELECT author FROM classics;
++---------------------+
+| author              |
++---------------------+
+| Charles Dickens     |
+| William Shakespeare |
+| Charles Darwin      |
+| Jane Austen         |
+| Mark Twain          |
++---------------------+
+5 rows in set (0.000 sec)
+
+MySQL [publications]> SELECT DISTINCT author FROM classics;
++---------------------+
+| author              |
++---------------------+
+| Charles Dickens     |
+| William Shakespeare |
+| Charles Darwin      |
+| Jane Austen         |
+| Mark Twain          |
++---------------------+
+5 rows in set (0.000 sec)
+
+MySQL [publications]> DELETE FROM classics WHERE title='Little Dorrit';
+Query OK, 0 rows affected (0.001 sec)
+
+MySQL [publications]> SELECT author,title FROM classics WHERE author="Mark Twain";
++------------+------------------------------+
+| author     | title                        |
++------------+------------------------------+
+| Mark Twain | The Adventures of Tom Sawyer |
++------------+------------------------------+
+1 row in set (0.003 sec)
+
+MySQL [publications]> SELECT author,title FROM classics WHERE isbn="9781598184891";
++------------+------------------------------+
+| author     | title                        |
++------------+------------------------------+
+| Mark Twain | The Adventures of Tom Sawyer |
++------------+------------------------------+
+1 row in set (0.000 sec)
+
+MySQL [publications]> SELECT author,title FROM classics WHERE author LIKE "Charles%";
++-----------------+------------------------+
+| author          | title                  |
++-----------------+------------------------+
+| Charles Darwin  | The Origin of Species  |
+| Charles Dickens | The Old Curiosity Shop |
++-----------------+------------------------+
+2 rows in set (0.003 sec)
+
+MySQL [publications]> SELECT author,title FROM classics WHERE title LIKE "%Species";
++----------------+-----------------------+
+| author         | title                 |
++----------------+-----------------------+
+| Charles Darwin | The Origin of Species |
++----------------+-----------------------+
+1 row in set (0.000 sec)
+
+MySQL [publications]> SELECT author,title FROM classics WHERE title LIKE "%and%";
++---------------------+---------------------+
+| author              | title               |
++---------------------+---------------------+
+| William Shakespeare | Romeo and Juliet    |
+| Jane Austen         | Pride and Prejudice |
++---------------------+---------------------+
+2 rows in set (0.000 sec)
+
+MySQL [publications]> SELECT author,title FROM classics LIMIT 3;
++---------------------+------------------------+
+| author              | title                  |
++---------------------+------------------------+
+| Charles Dickens     | The Old Curiosity Shop |
+| William Shakespeare | Romeo and Juliet       |
+| Charles Darwin      | The Origin of Species  |
++---------------------+------------------------+
+3 rows in set (0.000 sec)
+
+MySQL [publications]> SELECT author,title FROM classics LIMIT 1,2;
++---------------------+-----------------------+
+| author              | title                 |
++---------------------+-----------------------+
+| William Shakespeare | Romeo and Juliet      |
+| Charles Darwin      | The Origin of Species |
++---------------------+-----------------------+
+2 rows in set (0.000 sec)
+
+MySQL [publications]> SELECT author,title FROM classics LIMIT 3,1;
++-------------+---------------------+
+| author      | title               |
++-------------+---------------------+
+| Jane Austen | Pride and Prejudice |
++-------------+---------------------+
+1 row in set (0.000 sec)
+MySQL [publications]> UPDATE classics SET author='Mark Twain (Samuel Langhorne Clemens)'
+    -> WHERE author='Mark Twain';
+Query OK, 1 row affected (0.007 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MySQL [publications]> UPDATE classics SET category='Classic Fiction'
+    -> WHERE category='Fiction';
+Query OK, 3 rows affected (0.016 sec)
+Rows matched: 3  Changed: 3  Warnings: 0
+
+MySQL [publications]> SELECT author,title FROM classics ORDER BY author;
++---------------------------------------+------------------------------+
+| author                                | title                        |
++---------------------------------------+------------------------------+
+| Charles Darwin                        | The Origin of Species        |
+| Charles Dickens                       | The Old Curiosity Shop       |
+| Jane Austen                           | Pride and Prejudice          |
+| Mark Twain (Samuel Langhorne Clemens) | The Adventures of Tom Sawyer |
+| William Shakespeare                   | Romeo and Juliet             |
++---------------------------------------+------------------------------+
+5 rows in set (0.000 sec)
+
+MySQL [publications]> SELECT author,title FROM classics ORDER BY title DESC;
++---------------------------------------+------------------------------+
+| author                                | title                        |
++---------------------------------------+------------------------------+
+| Charles Darwin                        | The Origin of Species        |
+| Charles Dickens                       | The Old Curiosity Shop       |
+| Mark Twain (Samuel Langhorne Clemens) | The Adventures of Tom Sawyer |
+| William Shakespeare                   | Romeo and Juliet             |
+| Jane Austen                           | Pride and Prejudice          |
++---------------------------------------+------------------------------+
+5 rows in set (0.000 sec)
+
+MySQL [publications]> SELECT author,title,year FROM classics ORDER BY author,year DESC;
++---------------------------------------+------------------------------+------+
+| author                                | title                        | year |
++---------------------------------------+------------------------------+------+
+| Charles Darwin                        | The Origin of Species        | 1856 |
+| Charles Dickens                       | The Old Curiosity Shop       | 1841 |
+| Jane Austen                           | Pride and Prejudice          | 1811 |
+| Mark Twain (Samuel Langhorne Clemens) | The Adventures of Tom Sawyer | 1876 |
+| William Shakespeare                   | Romeo and Juliet             | 1594 |
++---------------------------------------+------------------------------+------+
+5 rows in set (0.000 sec)
+
+MySQL [publications]> CREATE TABLE customers (
+    -> name VARCHAR(128),
+    -> isbn VARCHAR(13),
+    -> PRIMARY KEY (isbn)) ENGINE InnoDB;
+Query OK, 0 rows affected (0.072 sec)
+
+MySQL [publications]> INSERT INTO customers(name,isbn)
+    -> VALUES('Joe Bloggs','9780099533474');
+Query OK, 1 row affected (0.007 sec)
+
+MySQL [publications]> INSERT INTO customers(name,isbn)
+    -> VALUES('Mary Smith','9780582506206');
+Query OK, 1 row affected (0.007 sec)
+
+MySQL [publications]> INSERT INTO customers(name,isbn)
+    -> VALUES('Jack Wilson','9780517123201');
+Query OK, 1 row affected (0.005 sec)
+
+MySQL [publications]> SELECT * FROM customers;
++-------------+---------------+
+| name        | isbn          |
++-------------+---------------+
+| Joe Bloggs  | 9780099533474 |
+| Jack Wilson | 9780517123201 |
+| Mary Smith  | 9780582506206 |
++-------------+---------------+
+3 rows in set (0.000 sec)
+
+MySQL [publications]> SELECT name,author,title FROM customers,classics
+    -> WHERE customers.isbn=classics.isbn;
++-------------+-----------------+------------------------+
+| name        | author          | title                  |
++-------------+-----------------+------------------------+
+| Joe Bloggs  | Charles Dickens | The Old Curiosity Shop |
+| Jack Wilson | Charles Darwin  | The Origin of Species  |
+| Mary Smith  | Jane Austen     | Pride and Prejudice    |
++-------------+-----------------+------------------------+
+3 rows in set (0.000 sec)
+
+MySQL [publications]> SELECT author,title FROM classics WHERE
+    -> author LIKE "Charles%" AND author LIKE "%Darwin";
++----------------+-----------------------+
+| author         | title                 |
++----------------+-----------------------+
+| Charles Darwin | The Origin of Species |
++----------------+-----------------------+
+1 row in set (0.001 sec)
+
+MySQL [publications]> SELECT author,title FROM classics WHERE
+    -> author LIKE "%Mark Twain%" OR author LIKE "%Samuel Langhorne Clemens%";
++---------------------------------------+------------------------------+
+| author                                | title                        |
++---------------------------------------+------------------------------+
+| Mark Twain (Samuel Langhorne Clemens) | The Adventures of Tom Sawyer |
++---------------------------------------+------------------------------+
+1 row in set (0.000 sec)
+
+MySQL [publications]> SELECT author,title FROM classics WHERE
+    -> author LIKE "Charles%" AND author NOT LIKE "%Darwin";
++-----------------+------------------------+
+| author          | title                  |
++-----------------+------------------------+
+| Charles Dickens | The Old Curiosity Shop |
++-----------------+------------------------+
+1 row in set (0.000 sec)
+MySQL [publications]> CREATE TABLE accounts (
+    -> number INT, balance FLOAT, PRIMARY KEY(number)
+    -> ) ENGINE InnoDB;
+Query OK, 0 rows affected (0.097 sec)
+
+MySQL [publications]> DESCRIBE accounts;
++---------+-------+------+-----+---------+-------+
+| Field   | Type  | Null | Key | Default | Extra |
++---------+-------+------+-----+---------+-------+
+| number  | int   | NO   | PRI | NULL    |       |
+| balance | float | YES  |     | NULL    |       |
++---------+-------+------+-----+---------+-------+
+2 rows in set (0.008 sec)
+
+MySQL [publications]> INSERT INTO accounts(number, balance) VALUES(12345, 1025.50);
+Query OK, 1 row affected (0.012 sec)
+
+MySQL [publications]> INSERT INTO accounts(number, balance) VALUES(67890, 140.00);
+Query OK, 1 row affected (0.012 sec)
+
+MySQL [publications]> SELECT * FROM accounts;
++--------+---------+
+| number | balance |
++--------+---------+
+|  12345 |  1025.5 |
+|  67890 |     140 |
++--------+---------+
+2 rows in set (0.000 sec)
+
+MySQL [publications]> BEGIN;
+Query OK, 0 rows affected (0.000 sec)
+
+MySQL [publications]> UPDATE accounts SET balance=balance+25.11 WHERE number=12345;
+Query OK, 1 row affected (0.003 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MySQL [publications]> COMMIT;
+Query OK, 0 rows affected (0.010 sec)
+
+MySQL [publications]> SELECT * FROM accounts;
++--------+---------+
+| number | balance |
++--------+---------+
+|  12345 | 1050.61 |
+|  67890 |     140 |
++--------+---------+
+2 rows in set (0.000 sec)
+
+MySQL [publications]> BEGIN;
+Query OK, 0 rows affected (0.000 sec)
+
+MySQL [publications]> UPDATE accounts SET balance=balance-250 WHERE number=12345;
+Query OK, 1 row affected (0.002 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MySQL [publications]> UPDATE accounts SET balance=balance+250 WHERE number=67890;
+Query OK, 1 row affected (0.000 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MySQL [publications]> SELECT * FROM accounts;
++--------+---------+
+| number | balance |
++--------+---------+
+|  12345 |  800.61 |
+|  67890 |     390 |
++--------+---------+
+2 rows in set (0.000 sec)
+
+MySQL [publications]> ROLLBACK;
+Query OK, 0 rows affected (0.010 sec)
+
+MySQL [publications]> SELECT * FROM accounts;
++--------+---------+
+| number | balance |
++--------+---------+
+|  12345 | 1050.61 |
+|  67890 |     140 |
++--------+---------+
+2 rows in set (0.000 sec)
+
+MySQL [publications]> EXPLAIN SELECT * FROM accounts WHERE number='12345';
++----+-------------+----------+------------+-------+---------------+---------+---------+-------+------+----------+-------+
+| id | select_type | table    | partitions | type  | possible_keys | key     | key_len | ref   | rows | filtered | Extra |
++----+-------------+----------+------------+-------+---------------+---------+---------+-------+------+----------+-------+
+|  1 | SIMPLE      | accounts | NULL       | const | PRIMARY       | PRIMARY | 4       | const |    1 |   100.00 | NULL  |
++----+-------------+----------+------------+-------+---------------+---------+---------+-------+------+----------+-------+
+1 row in set, 1 warning (0.000 sec)
+
+MySQL [publications]>
+
+
+
+
+
+
+
+
+
+
+
